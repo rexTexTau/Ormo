@@ -58,14 +58,18 @@ namespace Ormo
         /// <summary>
         /// Setup routine, that adds script parameters from data variable.
         /// </summary>
+        /// <remarks>
+        /// Script paremeters that were added before calling this routine will be removed.
+        /// </remarks>
         /// <param name="data">Source of script's parameters.</param>
         /// <exception cref="ArgumentException">Thrown if data is IEnumerable/</exception>
         public void Setup(TP data)
         {
+            Parameters = new Dictionary<string, object>();
+
             if (data is Nothing)
                 return;
 
-            Parameters = new Dictionary<string, object>();
             var type = typeof(TP);
 
             var underlyingType = Nullable.GetUnderlyingType(type);
