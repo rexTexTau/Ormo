@@ -8,6 +8,7 @@
 namespace Ormo
 {
     using System.Data.Common;
+    using System.Threading.Tasks;
     using Ormo.ScriptProviders;
 
     /// <summary>

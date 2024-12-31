@@ -7,7 +7,9 @@
 
 namespace Ormo
 {
+    using System.Collections.Generic;
     using System.Data.Common;
+    using System.Linq;
     using Ormo.ScriptProviders;
 
     /// <summary>
@@ -73,7 +75,10 @@ namespace Ormo
         /// <returns><see langword="true"/> if the query was run successfully, <see langword="false"/> otherwise.</returns>
         public IEnumerable<TR> Run(DbConnection connection)
         {
-            return RunAsync(connection).ToBlockingEnumerable();
+            foreach (var element in RunAsync(connection).ToEnumerable())
+            {
+                yield return element;
+            }
         }
 
         /// <summary>

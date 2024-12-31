@@ -7,6 +7,8 @@
 
 namespace Ormo.ScriptProviders
 {
+    using System.Collections.Generic;
+    using System.IO;
     using System.Reflection;
 
     /// <summary>
@@ -18,7 +20,7 @@ namespace Ormo.ScriptProviders
         /// Scripts storage.
         /// </summary>
 #pragma warning disable SA1401 // Fields should be private
-        internal readonly Dictionary<string, string> _storage = new ();
+        internal readonly Dictionary<string, string> _storage = new Dictionary<string, string>();
 #pragma warning restore SA1401 // Fields should be private
 
         private readonly string _assemblyName;

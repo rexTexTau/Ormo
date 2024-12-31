@@ -8,6 +8,7 @@
 namespace Ormo
 {
     using System.Data.Common;
+    using System.Threading.Tasks;
     using Ormo.ScriptProviders;
 
     /// <summary>
@@ -33,7 +34,7 @@ namespace Ormo
         /// </summary>
         /// <param name="connection">DbConnection to use.</param>
         /// <returns><see langword="true"/> if the query was run successfully, <see langword="false"/> otherwise.</returns>
-        public async Task<TR?> RunAsync(DbConnection connection)
+        public async Task<TR> RunAsync(DbConnection connection)
         {
             using (var command = connection.CreateCommand())
             {
@@ -50,19 +51,25 @@ namespace Ormo
                 }
                 catch
                 {
+#pragma warning disable CS8603 // Possible null reference return.
                     return default;
+#pragma warning restore CS8603 // Possible null reference return.
                 }
                 if (reader != null)
                 {
-                    TR? result = default;
+                    TR result = default;
                     if (reader.HasRows && await reader.ReadAsync())
                     {
                         result = RecordProcessor(reader);
                     }
                     await reader.DisposeAsync();
+#pragma warning disable CS8603 // Possible null reference return.
                     return result;
+#pragma warning restore CS8603 // Possible null reference return.
                 }
+#pragma warning disable CS8603 // Possible null reference return.
                 return default;
+#pragma warning restore CS8603 // Possible null reference return.
             }
         }
 
@@ -71,7 +78,7 @@ namespace Ormo
         /// </summary>
         /// <param name="connection">DbConnection to use.</param>
         /// <returns><see langword="true"/> if the query was run successfully, <see langword="false"/> otherwise.</returns>
-        public TR? Run(DbConnection connection)
+        public TR Run(DbConnection connection)
         {
             return RunAsync(connection).GetAwaiter().GetResult();
         }
