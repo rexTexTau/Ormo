@@ -72,7 +72,7 @@ namespace Ormo.Tests.Unit
         }
 
         /// <summary>
-        /// Test method to check Parameters is null if Setup method was called with Nothing object.
+        /// Test method to check Parameters is empty if Setup method was called with Nothing object.
         /// </summary>
         [Fact]
         public void Parameters_SetupNothing_Null()
@@ -80,7 +80,8 @@ namespace Ormo.Tests.Unit
             var sut = new ScriptedActionBase<Nothing>();
             sut.Setup(new Nothing());
 
-            Assert.Null(sut.Parameters);
+            Assert.NotNull(sut.Parameters);
+            Assert.Empty(sut.Parameters);
         }
 
         /// <summary>
