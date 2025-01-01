@@ -172,6 +172,7 @@ Ormo targets .NetStandard 2.1, because it heavily relies on C# 8.0 language feat
 Ormo is licensed under the Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License. 
 
 Full license text here: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
 Human-readable summary here: https://creativecommons.org/licenses/by-nc/4.0/
 
 You can obtain a less restrictive (dual) license on a paid basis. Get in touch:
