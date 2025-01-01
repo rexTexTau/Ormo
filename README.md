@@ -95,7 +95,7 @@ foreach (var job in await new GetAllJobs(/*instance of the script provider*/).Ru
 };
 ```
 
-Cause we do not need to call *Setup* in the absence of query parameters, the whole query call could easyly be a one-liner.
+Cause we do not need to call *Setup* in the absence of query parameters, the whole query call could easily be a one-liner.
 
 ## Command implementation
 [*Command*](https://github.com/rexTexTau/Ormo/blob/main/Ormo/Command.cs) base class should be used for commands. 
