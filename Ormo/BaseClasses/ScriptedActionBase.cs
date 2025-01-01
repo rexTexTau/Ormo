@@ -40,7 +40,7 @@ namespace Ormo.BaseClasses
         /// <summary>
         /// Script's parameters.
         /// </summary>
-        internal IDictionary<string, object>? Parameters { get; set; }
+        protected internal IDictionary<string, object>? Parameters { get; set; }
 
         /// <summary>
         /// Class to database field name converter to use.
@@ -52,7 +52,7 @@ namespace Ormo.BaseClasses
         /// </summary>
         /// <param name="value">Value to check.</param>
         /// <returns>DbNull.Value if value param is null, the value itself othrewise.</returns>
-        internal static object NullToDbNull(object? value)
+        protected internal static object NullToDbNull(object? value)
         {
             return value == null ? DBNull.Value : value;
         }
@@ -81,12 +81,12 @@ namespace Ormo.BaseClasses
         /// </remarks>
         /// <param name="data">Source of script's parameters.</param>
         /// <exception cref="ArgumentException">Thrown if data is IEnumerable/</exception>
-        public virtual void Setup(TP data)
+        public virtual ScriptedActionBase<TP> Setup(TP data)
         {
             Parameters = new Dictionary<string, object>();
 
             if (data is Nothing)
-                return;
+                return this;
 
             var type = typeof(TP);
 
@@ -113,6 +113,7 @@ namespace Ormo.BaseClasses
                     Parameters.Add(propertyName, NullToDbNull(propertyValue));
                 }
             }
+            return this;
         }
 
         /// <summary>
