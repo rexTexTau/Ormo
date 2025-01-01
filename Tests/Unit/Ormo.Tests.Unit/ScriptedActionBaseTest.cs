@@ -23,7 +23,7 @@ namespace Ormo.Tests.Unit
         {
             Assert.Throws<KeyNotFoundException>(() =>
             {
-                new ScriptedActionBase<Nothing>().LoadScript("Not.Existent", new EmbededResourcesScriptProvider(typeof(ScriptedActionBaseTest).Assembly));
+                new ScriptedActionBase<Nothing>().LoadScript("Not.Existent", new EmbeddedResourcesScriptProvider(typeof(ScriptedActionBaseTest).Assembly));
             });
         }
 
