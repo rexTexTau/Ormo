@@ -29,7 +29,7 @@ public sealed class GetLastResultByWorker : QuerySingle<int, JobInfo>
 
 First generic type parameter is a query parameter (in this sample, just an integer), and second generic type parameter describes the query result (*JobInfo* here in this sample is just a POCO model).
 
-That's it! Just four lines of code, and you have a query class, what, being paired with corresponding SQL, returns strongly-typed data (by calling its *Run* or *RunAsync* method from base query class).
+That's it! Just four lines of code, and you have a query class, which, being paired with corresponding SQL, returns strongly-typed data (by calling its *Run* or *RunAsync* method from base query class).
 
 *Sample Query SQL*:
 ```
