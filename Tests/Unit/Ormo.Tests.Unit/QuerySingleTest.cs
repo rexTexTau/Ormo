@@ -61,8 +61,7 @@ namespace Ormo.Tests.Unit
             var result = query.Run(_testSqlite.Connection);
 
             Assert.NotNull(result);
-            Assert.NotEmpty(result);
-            Assert.Equal("Test", result);
+            Assert.Equal("Test", result.Value);
         }
 
         /// <summary>

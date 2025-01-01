@@ -5,13 +5,14 @@
 // This code has a less restrictive (dual) license provided on a paid basis
 // Contacts: email – rextextau@gmail.com; telegram – @rextextau
 
-namespace Ormo
+namespace Ormo.BaseClasses
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Data.Common;
     using System.Linq;
+    using Ormo.CaseConverters;
     using Ormo.ScriptProviders;
 
     /// <summary>
@@ -23,6 +24,15 @@ namespace Ormo
     public class ScriptedActionBase<TP>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptedActionBase"/> class.
+        /// </summary>
+        /// <param name="fieldNameConverter">Class to database field name converter to use. If not set, default one is used (<see cref="PascalToUnderscoreCaseConverter"/>)</param>
+        public ScriptedActionBase(IClassToDatabaseFieldNameConverter? fieldNameConverter = null)
+        {
+            FieldNameConverter = fieldNameConverter ?? new PascalToUnderscoreCaseConverter();
+        }
+
+        /// <summary>
         /// Script to execute.
         /// </summary>
         protected string? Script { get; private set; }
@@ -31,6 +41,11 @@ namespace Ormo
         /// Script's parameters.
         /// </summary>
         internal IDictionary<string, object>? Parameters { get; set; }
+
+        /// <summary>
+        /// Class to database field name converter to use.
+        /// </summary>
+        protected IClassToDatabaseFieldNameConverter FieldNameConverter { get; set; }
 
         /// <summary>
         /// Checks if value parameter is null and returns DbNull.Value in that case.
@@ -66,7 +81,7 @@ namespace Ormo
         /// </remarks>
         /// <param name="data">Source of script's parameters.</param>
         /// <exception cref="ArgumentException">Thrown if data is IEnumerable/</exception>
-        public void Setup(TP data)
+        public virtual void Setup(TP data)
         {
             Parameters = new Dictionary<string, object>();
 
@@ -79,9 +94,9 @@ namespace Ormo
             if (underlyingType != null)
                 type = underlyingType;
 
-            if (type.IsPrimitive)
+            if ((!type.IsClass && !type.IsInterface) || type.Name == "String")
             {
-                Parameters.Add(type.Name.ToLowerInvariant(), NullToDbNull(data));
+                Parameters.Add("param", NullToDbNull(data)); // single ordinal param in script should be named just @param
             }
             else if (typeof(IEnumerable).IsAssignableFrom(type))
             {
@@ -93,8 +108,8 @@ namespace Ormo
 
                 foreach (var property in properties)
                 {
-                    string propertyName = property.Name.ToLowerInvariant();
-                    object? propertyValue = property.GetValue(data);
+                    var propertyName = FieldNameConverter.Convert(property.Name.ToLowerInvariant());
+                    var propertyValue = property.GetValue(data);
                     Parameters.Add(propertyName, NullToDbNull(propertyValue));
                 }
             }

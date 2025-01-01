@@ -9,22 +9,25 @@ namespace Ormo
 {
     using System.Data.Common;
     using System.Threading.Tasks;
+    using Ormo.BaseClasses;
+    using Ormo.CaseConverters;
     using Ormo.ScriptProviders;
 
     /// <summary>
     /// Abstract class to be inherited by an arbitraty query that returns a single value.
     /// </summary>
     /// <inheritdoc cref="ScriptedActionBase" path="/typeparam[@name='TP']" />
-    /// <typeparam name="TR">
+    /// <inheritdoc cref="ScriptedActionBase" path="/typeparam[@name='TR']" />
     /// Resulting data type.
     /// </typeparam>
-    public abstract class QuerySingle<TP, TR> : ScriptedActionBase<TP>
+    public abstract class QuerySingle<TP, TR> : QueryBase<TP, TR>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QuerySingle"/> class.
         /// </summary>
         /// <param name="scriptProvider">Script provider to use to load query script.</param>
-        protected QuerySingle(IScriptProvider scriptProvider)
+        /// <inheritdoc cref="ScriptedActionBase" path="/param[@name='fieldNameConverter']" />
+        protected QuerySingle(IScriptProvider scriptProvider, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(fieldNameConverter)
         {
             LoadScript("Queries." + GetType().Name, scriptProvider);
         }
@@ -82,12 +85,5 @@ namespace Ormo
         {
             return RunAsync(connection).GetAwaiter().GetResult();
         }
-
-        /// <summary>
-        /// The record processor routine to override, that transfroms output to typed and most convenient result for consumer to use.
-        /// </summary>
-        /// <param name="reader">Reader that provides raw query output.</param>
-        /// <returns>Typed data.</returns>
-        protected abstract TR RecordProcessor(DbDataReader reader);
     }
 }

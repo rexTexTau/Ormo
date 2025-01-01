@@ -7,7 +7,6 @@
 
 namespace Ormo.Tests.Unit.Queries
 {
-    using System.Data.Common;
     using Ormo.ScriptProviders;
 
     /// <summary>
@@ -21,12 +20,6 @@ namespace Ormo.Tests.Unit.Queries
         /// <param name="scriptsProvider">Script provider to use to get command script (should be <see cref="FolderScriptProvider"/>).</param>
         public FileQuery(IScriptProvider scriptsProvider) : base(scriptsProvider)
         {
-        }
-
-        /// <inheritdoc/>
-        protected override string RecordProcessor(DbDataReader reader)
-        {
-            return reader.GetString(0);
         }
     }
 }

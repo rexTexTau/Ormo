@@ -1,2 +1,2 @@
-﻿SELECT value FROM table_from_resource
-WHERE id = @int32;
+﻿SELECT * FROM table_from_resource
+WHERE id = @param;

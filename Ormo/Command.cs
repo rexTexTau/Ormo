@@ -9,6 +9,8 @@ namespace Ormo
 {
     using System.Data.Common;
     using System.Threading.Tasks;
+    using Ormo.BaseClasses;
+    using Ormo.CaseConverters;
     using Ormo.ScriptProviders;
 
     /// <summary>
@@ -21,7 +23,8 @@ namespace Ormo
         /// Initializes a new instance of the <see cref="Command"/> class.
         /// </summary>
         /// <param name="scriptProvider">Script provider to use to load command script.</param>
-        protected Command(IScriptProvider scriptProvider)
+        /// <inheritdoc cref="ScriptedActionBase" path="/param[@name='fieldNameConverter']" />
+        protected Command(IScriptProvider scriptProvider, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(fieldNameConverter)
         {
             LoadScript("Commands." + GetType().Name, scriptProvider);
         }

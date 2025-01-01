@@ -7,13 +7,12 @@
 
 namespace Ormo.Tests.Unit.Queries
 {
-    using System.Data.Common;
     using Ormo.ScriptProviders;
 
     /// <summary>
     /// Test query which uses script from embedded resource.
     /// </summary>
-    internal class ResourceQuery : QuerySingle<int?, string>
+    internal class ResourceQuery : QuerySingle<int?, ResourceQueryResult>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceQuery"/> class.
@@ -21,12 +20,6 @@ namespace Ormo.Tests.Unit.Queries
         /// <param name="scriptsProvider">Script provider to use to get command script (should be <see cref="EmbededResourcesScriptProvider"/>).</param>
         public ResourceQuery(IScriptProvider scriptsProvider) : base(scriptsProvider)
         {
-        }
-
-        /// <inheritdoc/>
-        protected override string RecordProcessor(DbDataReader reader)
-        {
-            return reader.GetString(0);
         }
     }
 }

@@ -5,8 +5,10 @@
 // This code has a less restrictive (dual) license provided on a paid basis
 // Contacts: email – rextextau@gmail.com; telegram – @rextextau
 
-namespace Ormo.Tests.Unit
+namespace Ormo.Tests.Unit.BaseClasses
 {
+    using Ormo;
+    using Ormo.BaseClasses;
     using Ormo.ScriptProviders;
     using Ormo.Tests.Unit.Commands;
 
@@ -94,7 +96,7 @@ namespace Ormo.Tests.Unit
             sut.Setup(42);
 
             Assert.NotNull(sut.Parameters);
-            Assert.Equal("int32", sut.Parameters.First().Key);
+            Assert.Equal("param", sut.Parameters.First().Key);
             Assert.Equal(42, sut.Parameters.First().Value);
         }
 
@@ -108,7 +110,7 @@ namespace Ormo.Tests.Unit
             sut.Setup(42);
 
             Assert.NotNull(sut.Parameters);
-            Assert.Equal("int32", sut.Parameters.First().Key);
+            Assert.Equal("param", sut.Parameters.First().Key);
             Assert.Equal(42, sut.Parameters.First().Value);
         }
 

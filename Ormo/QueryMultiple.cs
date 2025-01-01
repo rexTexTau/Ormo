@@ -10,22 +10,25 @@ namespace Ormo
     using System.Collections.Generic;
     using System.Data.Common;
     using System.Linq;
+    using Ormo.BaseClasses;
+    using Ormo.CaseConverters;
     using Ormo.ScriptProviders;
 
     /// <summary>
     /// Abstract class to be inherited by an arbitraty query that can return multiple rows of data.
     /// </summary>
     /// <inheritdoc cref="ScriptedActionBase" path="/typeparam[@name='TP']" />
-    /// <typeparam name="TR">
+    /// <inheritdoc cref="ScriptedActionBase" path="/typeparam[@name='TR']" />
     /// Resulting row data type.
     /// </typeparam>
-    public abstract class QueryMultiple<TP, TR> : ScriptedActionBase<TP>
+    public abstract class QueryMultiple<TP, TR> : QueryBase<TP, TR>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QueryMultiple"/> class.
         /// </summary>
         /// <param name="scriptProvider">Script provider to use to load query script.</param>
-        protected QueryMultiple(IScriptProvider scriptProvider)
+        /// <inheritdoc cref="ScriptedActionBase" path="/param[@name='fieldNameConverter']" />
+        protected QueryMultiple(IScriptProvider scriptProvider, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(fieldNameConverter)
         {
             LoadScript("Queries." + GetType().Name, scriptProvider);
         }
@@ -80,12 +83,5 @@ namespace Ormo
                 yield return element;
             }
         }
-
-        /// <summary>
-        /// The record processor routine to override, that transfroms each output row to typed and most convenient result for consumer to use.
-        /// </summary>
-        /// <param name="reader">Reader that provides raw query output for each row.</param>
-        /// <returns>Typed data row.</returns>
-        protected abstract TR RecordProcessor(DbDataReader reader);
     }
 }

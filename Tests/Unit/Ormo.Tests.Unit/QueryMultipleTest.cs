@@ -50,10 +50,10 @@ namespace Ormo.Tests.Unit
         public void Execute_AfterTablesCreation_ReturnsExpectedSetOfTables()
         {
             new FileCommand(_provider).Run(_testSqlite.Connection);
-            var result = new FileQuery(_provider).Run(_testSqlite.Connection);
+            var result = new FileQuery(_provider).Run(_testSqlite.Connection).ToArray();
             Assert.NotNull(result);
             Assert.NotEmpty(result);
-            Assert.Equal(["another_table_from_file", "table_from_file"], result.ToArray());
+            Assert.Equal(["another_table_from_file", "table_from_file"], result);
         }
 
         /// <summary>
