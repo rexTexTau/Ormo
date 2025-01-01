@@ -98,36 +98,36 @@ foreach (var job in await new GetAllJobs(/*instance of the script provider*/).Ru
 Cause we do not need to call *Setup* in the absence of query parameters, the whole query call could easyly be a one-liner.
 
 ## Command implementation
-[*Command*](https://github.com/rexTexTau/Ormo/blob/main/Ormo/Command.cs)
+[*Command*](https://github.com/rexTexTau/Ormo/blob/main/Ormo/Command.cs) base class should be used for commands. 
 
 *Sample Command class*:
 ```
-    public class StoreRunResult : Command<WorkerRunResult>
-    {
-        public StoreRunResult(IScriptProvider provider, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(provider, fieldNameConverter)
-        {
-        }
+public class StoreRunResult : Command<WorkerRunResult>
+{
+	public StoreRunResult(IScriptProvider provider, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(provider, fieldNameConverter)
+	{
+	}
 
-        public override StoreRunResult Setup(RunResult data)
-        {
-            Parameters = new Dictionary<string, object>
-            {
-                { "id", data.WorkerId },
-                { "active", data.Active },
-                { "state", data.NeedsInteraction ? "NeedsInteraction" : "Waiting" },
-                { "data", NullToDbNull(data.Data) },
-                { "succeeded", data.Succeeded },
-                { "elapsed", data.Elapsed },
-                { "next_run_in", ((int)data.NextRunIn.TotalSeconds).ToString() }
-            };
-            return this;
-        }
+	public override StoreRunResult Setup(RunResult data)
+	{
+		Parameters = new Dictionary<string, object>
+		{
+			{ "id", data.WorkerId },
+			{ "active", data.Active },
+			{ "state", data.NeedsInteraction ? "NeedsInteraction" : "Waiting" },
+			{ "data", NullToDbNull(data.Data) },
+			{ "succeeded", data.Succeeded },
+			{ "elapsed", data.Elapsed },
+			{ "next_run_in", ((int)data.NextRunIn.TotalSeconds).ToString() }
+		};
+		return this;
+	}
 
-        protected override bool RowsAffectedProcessor(int rowsAffected)
-        {
-            return rowsAffected >= 3;
-        }
-    }
+	protected override bool RowsAffectedProcessor(int rowsAffected)
+	{
+		return rowsAffected >= 3;
+	}
+}
 ```
 
 *RunResult* here is just a POCO model with a constructor (that is called from *RecordProcessor*) and a set of corresponding properties to store result.
