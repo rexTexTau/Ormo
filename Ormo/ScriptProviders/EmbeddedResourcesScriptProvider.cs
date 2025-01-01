@@ -14,7 +14,7 @@ namespace Ormo.ScriptProviders
     /// <summary>
     /// Script provider that loads scripts embedded into an assembly.
     /// </summary>
-    public class EmbededResourcesScriptProvider : IScriptProvider
+    public class EmbeddedResourcesScriptProvider : IScriptProvider
     {
         /// <summary>
         /// Scripts storage.
@@ -26,10 +26,10 @@ namespace Ormo.ScriptProviders
         private readonly string _assemblyName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EmbededResourcesScriptProvider"/> class.
+        /// Initializes a new instance of the <see cref="EmbeddedResourcesScriptProvider"/> class.
         /// </summary>
         /// <param name="assembly">Assembly to load embedded scripts from.</param>
-        public EmbededResourcesScriptProvider(Assembly assembly)
+        public EmbeddedResourcesScriptProvider(Assembly assembly)
         {
             _assemblyName = Path.GetFileNameWithoutExtension(assembly.ManifestModule.Name);
             var names = assembly.GetManifestResourceNames();

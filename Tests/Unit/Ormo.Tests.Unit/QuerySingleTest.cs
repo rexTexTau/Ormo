@@ -17,7 +17,7 @@ namespace Ormo.Tests.Unit
     [Collection("Sequential")]
     public sealed class QuerySingleTest : IDisposable
     {
-        private readonly EmbededResourcesScriptProvider _provider;
+        private readonly EmbeddedResourcesScriptProvider _provider;
         private readonly TestSqlite _testSqlite;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Ormo.Tests.Unit
         /// </remarks>
         public QuerySingleTest()
         {
-            _provider = new EmbededResourcesScriptProvider(typeof(QuerySingleTest).Assembly);
+            _provider = new EmbeddedResourcesScriptProvider(typeof(QuerySingleTest).Assembly);
             _testSqlite = new TestSqlite();
         }
 

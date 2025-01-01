@@ -14,7 +14,7 @@ namespace Ormo.Tests.Unit.ScriptProviders
     /// </summary>
     public class EmbeddedResourcesScriptProviderTest
     {
-        private readonly EmbededResourcesScriptProvider _provider;
+        private readonly EmbeddedResourcesScriptProvider _provider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddedResourcesScriptProviderTest"/> class.
@@ -24,7 +24,7 @@ namespace Ormo.Tests.Unit.ScriptProviders
         /// </remarks>
         public EmbeddedResourcesScriptProviderTest()
         {
-            _provider = new EmbededResourcesScriptProvider(typeof(EmbeddedResourcesScriptProviderTest).Assembly);
+            _provider = new EmbeddedResourcesScriptProvider(typeof(EmbeddedResourcesScriptProviderTest).Assembly);
         }
 
         /// <summary>
