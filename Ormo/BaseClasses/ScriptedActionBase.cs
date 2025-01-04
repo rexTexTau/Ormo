@@ -29,7 +29,7 @@ namespace Ormo.BaseClasses
         /// <param name="fieldNameConverter">Class to database field name converter to use. If not set, default one is used (<see cref="PascalToUnderscoreCaseConverter"/>)</param>
         public ScriptedActionBase(IClassToDatabaseFieldNameConverter? fieldNameConverter = null)
         {
-            FieldNameConverter = fieldNameConverter ?? new PascalToUnderscoreCaseConverter();
+            FieldNameConverter = fieldNameConverter ?? OrmoConfiguration.Global.DefaultClassToDatabaseFieldNameConverter;
         }
 
         /// <summary>

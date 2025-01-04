@@ -30,6 +30,10 @@ namespace Ormo.Tests.Unit
         {
             _provider = new EmbeddedResourcesScriptProvider(typeof(QuerySingleTest).Assembly);
             _testSqlite = new TestSqlite();
+            OrmoConfiguration.Global.DefaultCommandScriptProvider = _provider;
+            OrmoConfiguration.Global.DefaultQueryScriptProvider = _provider;
+            OrmoConfiguration.Global.DefaultQueryConnection = _testSqlite.Connection;
+            OrmoConfiguration.Global.DefaultCommandConnection = _testSqlite.Connection;
         }
 
         /// <summary>
@@ -38,10 +42,10 @@ namespace Ormo.Tests.Unit
         [Fact]
         public void Run_EmptyDatabase_ReturnsNull()
         {
-            var query = new ResourceQuery(_provider);
+            var query = new ResourceQuery();
             query.Setup(1);
 
-            var result = query.Run(_testSqlite.Connection);
+            var result = query.Run();
 
             Assert.Null(result);
         }
@@ -52,13 +56,13 @@ namespace Ormo.Tests.Unit
         [Fact]
         public void Run_AfterTableCreationAndDataInsertion_ReturnsExpectedValue()
         {
-            var command = new ResourceCommand(_provider);
+            var command = new ResourceCommand();
             command.Setup(new ResourceCommandParameters { Id = 1, Value = "Test" });
-            command.Run(_testSqlite.Connection);
-            var query = new ResourceQuery(_provider);
+            command.Run();
+            var query = new ResourceQuery();
             query.Setup(1);
 
-            var result = query.Run(_testSqlite.Connection);
+            var result = query.Run();
 
             Assert.NotNull(result);
             Assert.Equal("Test", result.Value);

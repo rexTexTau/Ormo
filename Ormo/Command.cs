@@ -7,6 +7,7 @@
 
 namespace Ormo
 {
+    using System;
     using System.Data.Common;
     using System.Threading.Tasks;
     using Ormo.BaseClasses;
@@ -24,19 +25,25 @@ namespace Ormo
         /// </summary>
         /// <param name="scriptProvider">Script provider to use to load command script.</param>
         /// <inheritdoc cref="ScriptedActionBase" path="/param[@name='fieldNameConverter']" />
-        protected Command(IScriptProvider scriptProvider, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(fieldNameConverter)
+        protected Command(IScriptProvider? scriptProvider = null, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(fieldNameConverter)
         {
-            LoadScript("Commands." + GetType().Name, scriptProvider);
+            var provider = scriptProvider ?? OrmoConfiguration.Global.DefaultCommandScriptProvider;
+            if (provider == null)
+                throw new ArgumentNullException(nameof(scriptProvider));
+            LoadScript("Commands." + GetType().Name, provider);
         }
 
         /// <summary>
         /// Runs the command asynchronously.
         /// </summary>
-        /// <param name="connection">DbConnection to use.</param>
+        /// <param name="connection">DbConnection to use. If <see langword="null"/>, default connection from global settings is used.</param>
         /// <returns><see langword="true"/> if the command was run successfully, <see langword="false"/> otherwise.</returns>
-        public async Task<bool> RunAsync(DbConnection connection)
+        public async Task<bool> RunAsync(DbConnection? connection)
         {
-            using (var command = connection.CreateCommand())
+            var databaseConnection = connection ?? OrmoConfiguration.Global.DefaultCommandConnection;
+            if (databaseConnection == null)
+                throw new ArgumentNullException(nameof(connection));
+            using (var command = databaseConnection.CreateCommand())
             {
                 AddParametersToDbCommand(command);
 
@@ -62,7 +69,7 @@ namespace Ormo
         /// </summary>
         /// <param name="connection">DbConnection to use.</param>
         /// <returns><see langword="true"/> if the command was run successfully, <see langword="false"/> otherwise.</returns>
-        public bool Run(DbConnection connection)
+        public bool Run(DbConnection? connection = null)
         {
             return RunAsync(connection).GetAwaiter().GetResult();
         }

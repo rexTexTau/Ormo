@@ -7,6 +7,7 @@
 
 namespace Ormo
 {
+    using System;
     using System.Data.Common;
     using System.Threading.Tasks;
     using Ormo.BaseClasses;
@@ -27,19 +28,21 @@ namespace Ormo
         /// </summary>
         /// <param name="scriptProvider">Script provider to use to load query script.</param>
         /// <inheritdoc cref="ScriptedActionBase" path="/param[@name='fieldNameConverter']" />
-        protected QuerySingle(IScriptProvider scriptProvider, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(fieldNameConverter)
+        protected QuerySingle(IScriptProvider? scriptProvider, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(scriptProvider, fieldNameConverter)
         {
-            LoadScript("Queries." + GetType().Name, scriptProvider);
         }
 
         /// <summary>
         /// Runs the query asynchronously.
         /// </summary>
-        /// <param name="connection">DbConnection to use.</param>
+        /// <param name="connection">DbConnection to use. If <see langword="null"/>, default connection from global settings is used.</param>
         /// <returns><see langword="true"/> if the query was run successfully, <see langword="false"/> otherwise.</returns>
-        public async Task<TR> RunAsync(DbConnection connection)
+        public async Task<TR> RunAsync(DbConnection? connection = null)
         {
-            using (var command = connection.CreateCommand())
+            var databaseConnection = connection ?? OrmoConfiguration.Global.DefaultQueryConnection;
+            if (databaseConnection == null)
+                throw new ArgumentNullException(nameof(connection));
+            using (var command = databaseConnection.CreateCommand())
             {
                 AddParametersToDbCommand(command);
 
@@ -81,7 +84,7 @@ namespace Ormo
         /// </summary>
         /// <param name="connection">DbConnection to use.</param>
         /// <returns><see langword="true"/> if the query was run successfully, <see langword="false"/> otherwise.</returns>
-        public TR Run(DbConnection connection)
+        public TR Run(DbConnection? connection = null)
         {
             return RunAsync(connection).GetAwaiter().GetResult();
         }

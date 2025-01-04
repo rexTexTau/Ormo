@@ -18,7 +18,7 @@ namespace Ormo.Tests.Unit.Commands
         /// Initializes a new instance of the <see cref="ResourceCommand"/> class.
         /// </summary>
         /// <param name="scriptsProvider">Script provider to use to get command script (should be <see cref="EmbededResourcesScriptProvider"/>).</param>
-        public ResourceCommand(IScriptProvider scriptsProvider) : base(scriptsProvider)
+        public ResourceCommand(IScriptProvider? scriptsProvider = null) : base(scriptsProvider)
         {
         }
 

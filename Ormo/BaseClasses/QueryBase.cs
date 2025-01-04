@@ -11,6 +11,7 @@ namespace Ormo.BaseClasses
     using System.Data.Common;
     using System.Linq;
     using Ormo.CaseConverters;
+    using Ormo.ScriptProviders;
 
     /// <summary>
     /// Base class for queries.
@@ -25,8 +26,12 @@ namespace Ormo.BaseClasses
         /// Initializes a new instance of the <see cref="QueryBase"/> class.
         /// </summary>
         /// <inheritdoc cref="ScriptedActionBase" path="/param[@name='fieldNameConverter']" />
-        public QueryBase(IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(fieldNameConverter)
+        public QueryBase(IScriptProvider? scriptProvider = null, IClassToDatabaseFieldNameConverter? fieldNameConverter = null) : base(fieldNameConverter)
         {
+            var provider = scriptProvider ?? OrmoConfiguration.Global.DefaultQueryScriptProvider;
+            if (provider == null)
+                throw new ArgumentNullException(nameof(scriptProvider));
+            LoadScript("Queries." + GetType().Name, provider);
         }
 
         /// <summary>

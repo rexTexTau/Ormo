@@ -18,7 +18,7 @@ namespace Ormo.Tests.Unit.Queries
         /// Initializes a new instance of the <see cref="ResourceQuery"/> class.
         /// </summary>
         /// <param name="scriptsProvider">Script provider to use to get command script (should be <see cref="EmbededResourcesScriptProvider"/>).</param>
-        public ResourceQuery(IScriptProvider scriptsProvider) : base(scriptsProvider)
+        public ResourceQuery(IScriptProvider? scriptsProvider = null) : base(scriptsProvider)
         {
         }
     }
