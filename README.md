@@ -201,6 +201,18 @@ var succeeded = new SomeCommand(/*instance of the command script provider*/).Set
 
 *Run* method accepts same parameters *RunAsync* does.
 
+## Dapper comparison
+Ormo is very similar to the well-known .Net library called [**Dapper**](https://github.com/DapperLib/Dapper).
+
+Key differences are:
+- Ormo is CQRS-styled by design, while Dapper is not;
+- Ormo does handy and extensible SQL scripts management, while Dapper does not care where your SQL scripts come from at all;
+- Ormo does no caching at all (but allows consumer to implement it in a relatively handy way), while Dapper uses internal [*CacheInfo*](https://stackoverflow.com/questions/9897750/what-exactly-is-the-information-that-dapper-caches) class;
+- Ormo has ways to omit costly RTTI operations, while Dapper relies on RTTI (that means that Ormo can be faster in some cases);
+- Ormo uses strongly-typed parameter classes, while Dapper uses stongly-typed as well as dynamic ones (PRs are welcome);
+- Ormo does not support array/enumerable/list parameters and bulk operations at the moment, while Dapper does (PRs are welcome);
+- Dapper has much more mature, stable and reliable codebase at all (PRs are welcome).
+
 # Database migration
 Ormo does not provide any database migration mechanics, use [DBUp](https://github.com/DbUp/DbUp) (which has a similar approach: it also uses SQL scripts embedded into an assembly), [Liquibase](https://www.liquibase.com/) or another migrator that fits your needs.
 
