@@ -191,6 +191,16 @@ OrmoConfiguration.Global.DefaultCommandConnection = /*connection to the database
 OrmoConfiguration.Global.DefaultQueryConnection = /*connection to the database*/;
 ```
 
+## Synchronous execution
+Ormo queries and commands can be easily executed in synchronous codebase using *Run* method (instead of *RunAsync*):
+
+```
+var result = new SomeQuery(/*instance of the query script provider*/).Setup(/*query parameters*/).Run(/*connection to the queries database*/);
+var succeeded = new SomeCommand(/*instance of the command script provider*/).Setup(/*command parameters*/).Run(/*connection to the commands database*/);
+```
+
+*Run* method accepts same parameters *RunAsync* does.
+
 # Database migration
 Ormo does not provide any database migration mechanics, use [DBUp](https://github.com/DbUp/DbUp) (which has a similar approach: it also uses SQL scripts embedded into an assembly), [Liquibase](https://www.liquibase.com/) or another migrator that fits your needs.
 
