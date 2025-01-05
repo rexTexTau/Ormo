@@ -44,7 +44,7 @@ LIMIT 1;
 ```
 var query = new GetLastResultByWorker(/*instance of the script provider*/);
 query.Setup(1); // setting the query parameters using base Setup method
-var result = await query.RunASync(/*connection to the database*/);
+var result = await query.RunAsync(/*connection to the database*/);
 ```
 
 You can reuse the query class, calling *Setup* methods setting query parameters' values you need before calling another *Run* or *RunAsync*.
@@ -160,6 +160,35 @@ INSERT INTO result(data, succeeded, acquired, elapsed, worker_id)
 VALUES (@data, @succeeded, DATETIME('now'), @elapsed, @id);
 
 COMMIT;
+```
+
+## Using gobal Ormo configuration
+
+Ormo provides global [*OrmoConfiguration*](https://github.com/rexTexTau/Ormo/blob/main/Ormo/OrmoConfiguration.cs) singleton static class to make usage or queries and commands more streamlined. Calling methods of commands and queries also becomes more neat, cause in that case there is no need to pass field name converters, script providers and database connections as parameters – Ormo will simply use globals.
+
+*Sample calling code wihout utilizing OrmoConfiguration*:
+```
+var result = await new SomeQuery(/*instance of the query script provider*/).Setup(/*query parameters*/).RunAsync(/*connection to the queries database*/);
+var succeeded = await new SomeCommand(/*instance of the command script provider*/).Setup(/*command parameters*/).RunAsync(/*connection to the commands database*/);
+```
+
+*Sample calling code that utilizes OrmoConfiguration*:
+```
+// do it once at initialization time
+OrmoConfiguration.Global.DefaultCommandScriptProvider = /*instance of the command script provider*/;
+OrmoConfiguration.Global.DefaultQueryScriptProvider = /*instance of the query script provider*/;
+OrmoConfiguration.Global.DefaultCommandConnection = /*connection to the commands database*/;
+OrmoConfiguration.Global.DefaultQueryConnection = /*connection to the queries database*/;
+
+// call commands and queries just like that
+var result = await new SomeQuery().Setup(/*query parameters*/).RunAsync();
+var succeeded = await new SomeCommand().Setup(/*command parameters*/).RunAsync();
+```
+
+Note: there is obviously no need to use separate databases (and database connections) for commands and queries if you do not want to. In case of single database used by both queries and commands, simply set equal DefaultCommandConnection and DefaultQueryConnection:
+```
+OrmoConfiguration.Global.DefaultCommandConnection = /*connection to the database*/;
+OrmoConfiguration.Global.DefaultQueryConnection = /*connection to the database*/;
 ```
 
 # Database migration
