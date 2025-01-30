@@ -164,7 +164,7 @@ COMMIT;
 
 ## Using gobal Ormo configuration
 
-Ormo provides global [*OrmoConfiguration*](https://github.com/rexTexTau/Ormo/blob/main/Ormo/OrmoConfiguration.cs) singleton static class to make usage or queries and commands more streamlined. Calling methods of commands and queries also becomes more neat, cause in that case there is no need to pass field name converters, script providers and database connections as parameters – Ormo will simply use globals.
+Ormo provides global [*OrmoConfiguration*](https://github.com/rexTexTau/Ormo/blob/main/Ormo/OrmoConfiguration.cs) singleton static class to make usage of queries and commands more streamlined. Calling methods of commands and queries also becomes more neat, cause in that case there is no need to pass field name converters, script providers and database connections as parameters – Ormo will simply use globals.
 
 *Sample calling code wihout utilizing OrmoConfiguration*:
 ```
